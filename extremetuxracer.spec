@@ -1,7 +1,7 @@
 %define	name	extremetuxracer
 %define	gname	etracer
 %define	version	0.4
-%define	release	%mkrel 2
+%define	release	%mkrel 3
 %define	Summary	OpenGL racing game featuring Tux
 
 Name:		%{name}
@@ -85,7 +85,7 @@ It is based on the GPL version of TuxRacer.
 
 -----------------------------Warning--------------------------------------- 
 
-It might occurs that ppracer won t start, 
+It might occurs that etracer won t start, 
 in that case you need to edit ~/.ppracer/options 
 and adjust values to your hardware configuration.
 
@@ -98,7 +98,7 @@ Ce jeu est bas? sur la version GPL de TuxRacer.
 
 -----------------------------Attention-------------------------------------
 
-Il est possible que ppracer ne demarre pas.
+Il est possible que etracer ne demarre pas.
 Dans ce cas il vous faudra editer le fichier ~/.ppracer/options
 et changer les valeurs pour qu elles soient correctes avec votre
 configuration materielle.
