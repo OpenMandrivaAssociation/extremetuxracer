@@ -30,6 +30,9 @@ BuildRequires:	libsquirrel-devel
 Obsoletes:	tuxracer
 Provides:	tuxracer
 
+Obsoletes:	ppracer
+Provides:	ppracer
+
 %description
 Extreme Tux Racer is an OpenGL racing game featuring Tux,
 the Linux mascot. The goal of the game is to slide down a snow-
