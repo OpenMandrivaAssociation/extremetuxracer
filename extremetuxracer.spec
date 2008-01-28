@@ -1,8 +1,7 @@
-%define	name	ppracer
-%define	version	0.5
-%define	aversion 0.5alpha
-%define	release	%mkrel 0.alpha4
-%define	Summary	PlanetPenguin Racer is an OpenGL racing game
+%define	name	extremetuxracer
+%define	version	0.4
+%define	release	%mkrel 1
+%define	Summary	Extreme Tux Racer OpenGL racing game
 
 Name:		%{name}
 Version:	%{version}
@@ -10,15 +9,15 @@ Release:	%{release}
 Summary:	%{Summary}
 License:	GPL
 Group:		Games/Arcade
-URL:		http://projects.planetpenguin.de/racer/
-Source0:	http://download.berlios.de/ppracer/%{name}-%{aversion}.tar.bz2
+URL:		http://www.extremetuxracer.com/
+Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}.tar.gz
 Source1:	%{name}-link.tar.bz2
 Source11:	%{name}-16.png
 Source12:	%{name}-32.png
 Source13:	%{name}-48.png
 Patch0:		ppracer-squirrel.h.patch.bz2
 Patch1:		ppracer-0.5alpha-gcc4.1-fix.patch
-Buildroot:	%{_tmppath}/%{name}-%{aversion}-%{release}-buildroot
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	squirrel
 BuildRequires:	SDL_mixer-devel
 BuildRequires:	X11-static-devel
@@ -37,13 +36,13 @@ Obsoletes:	tuxracer
 Provides:	tuxracer
 
 %description
-PlanetPenguin Racer is an OpenGL racing game featuring Tux,
+Extreme Tux Racer is an OpenGL racing game featuring Tux,
 the Linux mascot. The goal of the game is to slide down a snow-
 and ice-covered mountain as quickly as possible.
 It is based on the GPL version of TuxRacer.
 
 %prep
-%setup -q -n %{name}-%{aversion}
+%setup -q
 
 %ifarch amd64 x86_64
 %patch0 -p0
@@ -85,7 +84,7 @@ cat > README.urpmi << EOF
 
 ---------------------------Description-------------------------------------
 
-PlanetPenguin Racer is an OpenGL racing game featuring Tux, 
+Extreme Tux Racer is an OpenGL racing game featuring Tux, 
 the Linux mascot. The goal of the game is to slide down 
 a snow- and ice-covered mountain as quickly as possible. 
 It is based on the GPL version of TuxRacer.
@@ -97,7 +96,7 @@ in that case you need to edit ~/.ppracer/options
 and adjust values to your hardware configuration.
 
 ---------------------------DescriptionFR-----------------------------------
-PlanetPenguin Racer est un jeu OpenGL avec en hero Tux la 
+Extreme Tux Racer est un jeu OpenGL avec en hero Tux la 
 masctotte Linux. Le but de ce jeu est de faire descendre Tux 
 le plus rapidement possible de pistes pentues et recouvertes de neige et
 de glace.
