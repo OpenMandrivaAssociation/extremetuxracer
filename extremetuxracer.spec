@@ -51,8 +51,6 @@ unzip %{gname}icons.zip
 rm -rf %{buildroot}
 %{makeinstall_std}
 
-
-
 install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
