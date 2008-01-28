@@ -1,4 +1,5 @@
 %define	name	extremetuxracer
+%define	gname	etracer
 %define	version	0.4
 %define	release	%mkrel 1
 %define	Summary	Extreme Tux Racer OpenGL racing game
@@ -58,9 +59,9 @@ install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
-Name=Planet Penguin Racer
+Name=Extreme Tux Racer
 Comment=%{Summary}
-Exec=%{_gamesbindir}/%{name}
+Exec=%{_gamesbindir}/%{gname}
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -122,4 +123,4 @@ rm -rf %{buildroot}
 %{_liconsdir}/%{name}*.png
 %{_miconsdir}/%{name}*.png
 %defattr(755,root,root,755)
-%{_gamesbindir}/%{name}
+%{_gamesbindir}/%{gname}
