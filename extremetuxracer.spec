@@ -1,8 +1,8 @@
 %define	name	extremetuxracer
 %define	gname	etracer
 %define	version	0.4
-%define	release	%mkrel 1
-%define	Summary	Extreme Tux Racer OpenGL racing game
+%define	release	%mkrel 2
+%define	Summary	OpenGL racing game featuring Tux
 
 Name:		%{name}
 Version:	%{version}
