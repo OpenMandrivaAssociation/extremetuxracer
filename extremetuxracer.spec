@@ -14,8 +14,6 @@ Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}.tar
 Source11:	%{name}-16.png
 Source12:	%{name}-32.png
 Source13:	%{name}-48.png
-Patch0:		ppracer-squirrel.h.patch.bz2
-Patch1:		ppracer-0.5alpha-gcc4.1-fix.patch
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	squirrel
 BuildRequires:	SDL_mixer-devel
@@ -42,11 +40,6 @@ It is based on the GPL version of TuxRacer.
 
 %prep
 %setup -q
-
-%ifarch amd64 x86_64
-%patch0 -p0
-%endif
-%patch1 -p1 -b .gcc41
 
 %build
 %configure	--bindir=%{_gamesbindir} \
