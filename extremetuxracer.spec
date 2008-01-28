@@ -25,6 +25,7 @@ BuildRequires:	freetype-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	libxml2 >= 2.4.11
 BuildRequires:	squirrel
+BuildRequires:	tcl-devel
 BuildRequires:	libsquirrel-devel
 
 Obsoletes:	tuxracer
