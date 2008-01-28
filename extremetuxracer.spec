@@ -11,7 +11,6 @@ License:	GPL
 Group:		Games/Arcade
 URL:		http://www.extremetuxracer.com/
 Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}.tar.gz
-Source1:	%{name}-link.tar.bz2
 Source11:	%{name}-16.png
 Source12:	%{name}-32.png
 Source13:	%{name}-48.png
