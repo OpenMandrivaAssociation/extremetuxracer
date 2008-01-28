@@ -12,9 +12,6 @@ License:	GPL
 Group:		Games/Arcade
 URL:		http://www.extremetuxracer.com/
 Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}.tar.gz
-Source11:	%{name}-16.png
-Source12:	%{name}-32.png
-Source13:	%{name}-48.png
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	squirrel
 BuildRequires:	SDL_mixer-devel
@@ -41,6 +38,7 @@ It is based on the GPL version of TuxRacer.
 
 %prep
 %setup -q
+unzip %{gname}icons.zip
 
 %build
 %configure	--bindir=%{_gamesbindir} \
@@ -62,16 +60,17 @@ Encoding=UTF-8
 Name=Extreme Tux Racer
 Comment=%{Summary}
 Exec=%{_gamesbindir}/%{gname}
-Icon=%{name}
+Icon=%{gname}
 Terminal=false
 Type=Application
 StartupNotify=true
 Categories=Game;ArcadeGame;X-MandrivaLinux-MoreApplications-Games-Arcade;
 EOF
 
-install -m644 %{SOURCE11} -D %{buildroot}%{_miconsdir}/%{name}.png
-install -m644 %{SOURCE12} -D %{buildroot}%{_iconsdir}/%{name}.png
-install -m644 %{SOURCE13} -D %{buildroot}%{_liconsdir}/%{name}.png
+for r in 16 22 32 48; do
+    install -D %{gname}icons/%{gname}icon_${r}.png %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps/%{gname}.png
+done
+install -D %{gname}icon.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
 
 cat > README.urpmi << EOF
 
@@ -107,9 +106,11 @@ EOF
 
 %post
 %{update_menus}
+%update_icon_cache hicolor
 
 %postun
 %{clean_menus}
+%clean_icon_cache hicolor
 
 %clean
 rm -rf %{buildroot}
@@ -119,8 +120,7 @@ rm -rf %{buildroot}
 %doc AUTHORS ChangeLog README.urpmi
 %{_gamesdatadir}/*
 %{_datadir}/applications/mandriva-%{name}.desktop
-%{_iconsdir}/%{name}.png
-%{_liconsdir}/%{name}*.png
-%{_miconsdir}/%{name}*.png
+%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
+%{_datadir}/icons/hicolor/*/apps/%{gname}.png
 %defattr(755,root,root,755)
 %{_gamesbindir}/%{gname}
