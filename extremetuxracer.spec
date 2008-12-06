@@ -1,12 +1,9 @@
 %define	name	extremetuxracer
-%define	gname	etracer
-%define	version	0.4
-%define	release	%mkrel 3
 %define	Summary	OpenGL racing game featuring Tux
 
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		extremetuxracer
+Version:	0.4
+Release:	%{mkrel 4}
 Summary:	%{Summary}
 License:	GPL
 Group:		Games/Arcade
@@ -33,6 +30,9 @@ Provides:	tuxracer
 
 Obsoletes:	ppracer
 Provides:	ppracer
+
+Obsoletes:	wherever-racer
+Provides:	wherever-racer
 
 %description
 Extreme Tux Racer is an OpenGL racing game featuring Tux,
