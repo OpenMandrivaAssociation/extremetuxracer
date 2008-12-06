@@ -1,3 +1,4 @@
+%define gname	etracer
 %define	name	extremetuxracer
 %define	Summary	OpenGL racing game featuring Tux
 
