@@ -3,13 +3,14 @@
 %define	Summary	OpenGL racing game featuring Tux
 
 Name:		extremetuxracer
-Version:	0.4
-Release:	%{mkrel 4}
+Version:	0.5
+Release:	%mkrel 0.beta.1
 Summary:	%{Summary}
-License:	GPL
+License:	GPLv2
 Group:		Games/Arcade
 URL:		http://www.extremetuxracer.com/
-Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}beta.tar.gz
+Patch0:		extremetuxracer-0.5-defaultopt.patch
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	squirrel
 BuildRequires:	SDL_mixer-devel
@@ -36,24 +37,27 @@ Obsoletes:	wherever-racer
 Provides:	wherever-racer
 
 %description
-Extreme Tux Racer is an OpenGL racing game featuring Tux,
-the Linux mascot. The goal of the game is to slide down a snow-
-and ice-covered mountain as quickly as possible.
-It is based on the GPL version of TuxRacer.
+Extreme Tux Racer is an OpenGL racing game featuring Tux, the Linux
+mascot. The goal of the game is to slide down a snow- and ice-covered
+mountain as quickly as possible.  It is based on the GPL version of
+TuxRacer.
 
 %prep
-%setup -q
+%setup -q -n extreme-tuxracer-%{version}beta
+%patch0 -p1 -b .defaultopt
 unzip %{gname}icons.zip
 
 %build
-%configure	--bindir=%{_gamesbindir} \
+CFLAGS="%{optflags} -O3 -ffast-math" \
+CXXFLAGS="%{optflags} -O3 -ffast-math" \
+%configure2_5x	--bindir=%{_gamesbindir} \
 		--with-data-dir=%{_gamesdatadir}/%{name}\
 		--datadir=%{_gamesdatadir} \
 		--disable-debug
 %make
 
 %install
-rm -rf %{buildroot}
+rm -rf %{buildroot} %{gname}.lang
 %{makeinstall_std}
 
 install -d %{buildroot}%{_datadir}/applications
@@ -74,6 +78,8 @@ for r in 16 22 32 48; do
     install -D %{gname}icons/%{gname}icon_${r}.png %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps/%{gname}.png
 done
 install -D %{gname}icon.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
+
+%find_lang %{gname}
 
 cat > README.urpmi << EOF
 
@@ -122,7 +128,7 @@ EOF
 %clean
 rm -rf %{buildroot}
 
-%files
+%files -f %{gname}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README.urpmi
 %{_gamesdatadir}/*
@@ -131,3 +137,4 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/*/apps/%{gname}.png
 %defattr(755,root,root,755)
 %{_gamesbindir}/%{gname}
+
