@@ -4,7 +4,7 @@
 
 Name:		extremetuxracer
 Version:	0.5
-Release:	%mkrel 0.beta.1
+Release:	%mkrel 0.beta.2
 Summary:	%{Summary}
 License:	GPLv2
 Group:		Games/Arcade
