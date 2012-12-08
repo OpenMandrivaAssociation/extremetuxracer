@@ -1,40 +1,32 @@
 %define gname	etracer
-%define	name	extremetuxracer
-%define	Summary	OpenGL racing game featuring Tux
 
 Name:		extremetuxracer
 Version:	0.5
-Release:	%mkrel 0.beta.7
-Summary:	%{Summary}
+Release:	0.beta.7
+Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
 URL:		http://www.extremetuxracer.com/
 Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}beta.tar.gz
 Patch0:		extremetuxracer-0.5-defaultopt.patch
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Patch1:		extremetuxracer-0.5-link.patch
+Patch2:		extremetuxracer-0.5-install.patch
+Patch3:		extreme-tuxracer-0.5beta-libpng15.patch
 Requires:	squirrel
-BuildRequires:	SDL_mixer-devel
-BuildRequires:	X11-static-devel
-BuildRequires:	alsa-lib-devel
-BuildRequires:	esound-devel
-BuildRequires:	MesaGLU-devel
+BuildRequires:	pkgconfig(SDL_mixer)
+BuildRequires:	pkgconfig(alsa)
+BuildRequires:	pkgconfig(esound)
+BuildRequires:	pkgconfig(glu)
 BuildRequires:	texinfo
-BuildRequires:	libpng-devel
-BuildRequires:	freetype-devel
-BuildRequires:	libxslt-devel
-BuildRequires:	libxml2 >= 2.4.11
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(libxslt)
+BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	squirrel
 BuildRequires:	tcl-devel
 BuildRequires:	libsquirrel-devel
 
-Obsoletes:	tuxracer
-Provides:	tuxracer
-
-Obsoletes:	ppracer
-Provides:	ppracer
-
-Obsoletes:	wherever-racer
-Provides:	wherever-racer
+Provides:	tuxracer = %{version}-%{release}
 
 %description
 Extreme Tux Racer is an OpenGL racing game featuring Tux, the Linux
@@ -45,9 +37,13 @@ TuxRacer.
 %prep
 %setup -q -n extreme-tuxracer-%{version}beta
 %patch0 -p1 -b .defaultopt
+%patch1 -p0 -b .link
+%patch2 -p0 -b .install
+%patch3 -p1 -b .libpng
 unzip %{gname}icons.zip
 
 %build
+autoreconf -fi
 CFLAGS="%{optflags} -O3 -ffast-math" \
 CXXFLAGS="%{optflags} -O3 -ffast-math" \
 %configure2_5x	--bindir=%{_gamesbindir} \
@@ -57,15 +53,14 @@ CXXFLAGS="%{optflags} -O3 -ffast-math" \
 %make
 
 %install
-rm -rf %{buildroot} %{gname}.lang
-%{makeinstall_std}
+%makeinstall_std
 
 install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
 Name=Extreme Tux Racer
-Comment=%{Summary}
+Comment=OpenGL racing game featuring Tux
 Exec=%{_gamesbindir}/%{gname}
 Icon=%{gname}
 Terminal=false
@@ -92,8 +87,8 @@ It is based on the GPL version of TuxRacer.
 
 -----------------------------Warning--------------------------------------- 
 
-It might occurs that etracer won t start, 
-in that case you need to edit ~/.ppracer/options 
+It might occurs that etracer won t start,
+in that case you need to edit ~/.ppracer/options
 and adjust values to your hardware configuration.
 
 ---------------------------DescriptionFR-----------------------------------
@@ -113,28 +108,79 @@ configuration materielle.
 ---------------------------------------------------------------------------
 EOF
 
-%if %mdkversion < 200900
-%post
-%{update_menus}
-%update_icon_cache hicolor
-%endif
-
-%if %mdkversion < 200900
-%postun
-%{clean_menus}
-%clean_icon_cache hicolor
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files -f %{gname}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README.urpmi
 %{_gamesdatadir}/*
 %{_datadir}/applications/mandriva-%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
-%{_datadir}/icons/hicolor/*/apps/%{gname}.png
-%defattr(755,root,root,755)
-%{_gamesbindir}/%{gname}
+%{_datadir}/icons/hicolor/*/apps/%{gname}.*
+%attr(755,root,root) %{_gamesbindir}/%{gname}
+
+
+
+%changelog
+* Tue May 03 2011 Oden Eriksson <oeriksson@mandriva.com> 0.5-0.beta.6mdv2011.0
++ Revision: 664166
+- mass rebuild
+
+* Thu Dec 02 2010 Oden Eriksson <oeriksson@mandriva.com> 0.5-0.beta.5mdv2011.0
++ Revision: 605115
+- rebuild
+
+* Wed Mar 17 2010 Oden Eriksson <oeriksson@mandriva.com> 0.5-0.beta.4mdv2010.1
++ Revision: 522580
+- rebuilt for 2010.1
+
+* Wed Sep 02 2009 Christophe Fergeau <cfergeau@mandriva.com> 0.5-0.beta.3mdv2010.0
++ Revision: 424395
+- rebuild
+
+* Mon Mar 16 2009 Giuseppe Ghibò <ghibo@mandriva.com> 0.5-0.beta.2mdv2009.1
++ Revision: 355692
+- Default windowed resolution to 800x600 (640x480 would leave out some element).
+
+* Sun Mar 15 2009 Giuseppe Ghibò <ghibo@mandriva.com> 0.5-0.beta.1mdv2009.1
++ Revision: 355192
+- Release 0.5beta.
+- Better optimization.
+- Default to windowed and show FPS (Patch0).
+- Added languages.
+
+* Sat Dec 06 2008 Adam Williamson <awilliamson@mandriva.org> 0.4-4mdv2009.1
++ Revision: 311014
+- re-add gname define (got lost somehow)
+- obsolete wherever-racer, which appears to be dead now
+- rebuild for new tcl
+
+* Thu Jun 12 2008 Pixel <pixel@mandriva.com> 0.4-3mdv2009.0
++ Revision: 218423
+- rpm filetriggers deprecates update_menus/update_scrollkeeper/update_mime_database/update_icon_cache/update_desktop_database/post_install_gconf_schemas
+
+* Mon Jan 28 2008 Ademar de Souza Reis Jr <ademar@mandriva.com.br> 0.4-3mdv2008.1
++ Revision: 159485
+- fix executable name in README.urpmi (s/ppracer/etracer/)
+
+* Mon Jan 28 2008 Olivier Blin <oblin@mandriva.com> 0.4-2mdv2008.1
++ Revision: 159157
+- nicer summary (from tpg)
+
+* Mon Jan 28 2008 Olivier Blin <oblin@mandriva.com> 0.4-1mdv2008.1
++ Revision: 159113
+- buildrequire tcl-devel
+- obsoletes/provides ppracer
+- use icons from source and install them in XDG locations
+- adapt to new etracer binary name
+- drop unnecessary build patches
+- drop unused source
+- extremetuxracer 0.4
+- rename ppracer as extremetuxracer
+- restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - drop old menu
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Wed Aug 29 2007 Oden Eriksson <oeriksson@mandriva.com> 0.5-0.alpha4mdv2008.0
++ Revision: 74800
+- Import ppracer
 
