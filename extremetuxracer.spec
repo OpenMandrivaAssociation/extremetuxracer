@@ -2,7 +2,7 @@
 
 Name:		extremetuxracer
 Version:	0.5
-Release:	0.beta.7
+Release:	0.beta.8
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
@@ -12,6 +12,7 @@ Patch0:		extremetuxracer-0.5-defaultopt.patch
 Patch1:		extremetuxracer-0.5-link.patch
 Patch2:		extremetuxracer-0.5-install.patch
 Patch3:		extreme-tuxracer-0.5beta-libpng15.patch
+Patch4:		extreme-tuxracer-0.5beta-automake113.patch
 Requires:	squirrel
 BuildRequires:	pkgconfig(SDL_mixer)
 BuildRequires:	pkgconfig(alsa)
@@ -40,6 +41,7 @@ TuxRacer.
 %patch1 -p0 -b .link
 %patch2 -p0 -b .install
 %patch3 -p1 -b .libpng
+%patch4 -p1 -b .automake113
 unzip %{gname}icons.zip
 
 %build
