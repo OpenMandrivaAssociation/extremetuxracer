@@ -25,7 +25,7 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	squirrel
 BuildRequires:	tcl-devel
-BuildRequires:	libsquirrel-devel
+BuildRequires:	pkgconfig(squirrel)
 
 Provides:	tuxracer = %{version}-%{release}
 
@@ -51,7 +51,7 @@ CXXFLAGS="%{optflags} -O3 -ffast-math" \
 %configure2_5x	--bindir=%{_gamesbindir} \
 		--with-data-dir=%{_gamesdatadir}/%{name}\
 		--datadir=%{_gamesdatadir} \
-		--disable-debug
+		--disable-debug --with-tcl=%{_libdir}
 %make
 
 %install
