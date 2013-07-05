@@ -24,6 +24,7 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	squirrel
 BuildRequires:	pkgconfig(squirrel)
+BuildRequires:	imagemagick
 
 Provides:	tuxracer = %{version}-%{release}
 
