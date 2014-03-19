@@ -1,9 +1,9 @@
 %define gname	etracer
-%define beta	beta1
+%define beta	%{nil}
 
 Name:		extremetuxracer
-Version:	0.6
-Release:	0.%beta.1
+Version:	0.6.0
+Release:	%{?beta:0.%beta.}1
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
@@ -11,7 +11,11 @@ URL:		http://extremetuxracer.sourceforge.net/
 #Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}beta.tar.gz
 # Current code is available in svn only
 # svn co svn://svn.code.sf.net/p/extremetuxracer/code/tags/"0.6 Beta 1"
+%if "%beta" != "%{nil}"
 Source0:	extremetuxracer-%version-%beta.tar.xz
+%else
+Source0:	http://garr.dl.sourceforge.net/project/extremetuxracer/releases/%version/etr-%version.tar.xz
+%endif
 Requires:	squirrel
 BuildRequires:	pkgconfig(SDL_image)
 BuildRequires:	pkgconfig(SDL_mixer)
@@ -35,15 +39,15 @@ mountain as quickly as possible.  It is based on the GPL version of
 TuxRacer.
 
 %prep
-%setup -q -n %{name}-%{version}-%{beta}
+%setup -q -n etr-%{version}
 
 %build
 aclocal
 autoheader
 automake -a --foreign
 autoconf
-CFLAGS="%{optflags} -O3 -ffast-math" \
-CXXFLAGS="%{optflags} -O3 -ffast-math" \
+CFLAGS="%{optflags} -Ofast -ffast-math" \
+CXXFLAGS="%{optflags} -Ofast -ffast-math" \
 %configure2_5x	--bindir=%{_gamesbindir} \
 		--datadir=%{_gamesdatadir} \
 		--disable-debug
@@ -51,20 +55,6 @@ CXXFLAGS="%{optflags} -O3 -ffast-math" \
 
 %install
 %makeinstall_std
-
-install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
-[Desktop Entry]
-Encoding=UTF-8
-Name=Extreme Tux Racer
-Comment=OpenGL racing game featuring Tux
-Exec=%{_gamesbindir}/etr
-Icon=%{gname}
-Terminal=false
-Type=Application
-StartupNotify=true
-Categories=Game;ArcadeGame;X-MandrivaLinux-MoreApplications-Games-Arcade;
-EOF
 
 for r in 16 22 32 48; do
 	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps
@@ -109,7 +99,9 @@ EOF
 %files -f %{gname}.lang
 %defattr(644,root,root,755)
 %doc README.urpmi
+%doc %{_docdir}/etr
 %{_gamesdatadir}/*
-%{_datadir}/applications/mandriva-%{name}.desktop
+%{_datadir}/applications/etr.desktop
 %{_datadir}/icons/hicolor/*/apps/%{gname}.*
+%{_datadir}/pixmaps/etr.png
 %attr(755,root,root) %{_gamesbindir}/etr
