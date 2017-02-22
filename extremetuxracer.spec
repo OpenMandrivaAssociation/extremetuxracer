@@ -15,6 +15,7 @@ Source0:	extremetuxracer-%version-%beta.tar.xz
 %else
 Source0:	http://sourceforge.net/projects/extremetuxracer/files/releases/%version/etr-%version.tar.xz
 %endif
+Patch1:		etr-0.7.4-ptr.patch
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	texinfo
@@ -35,6 +36,7 @@ TuxRacer.
 
 %prep
 %setup -q -n etr-%{version}
+%apply_patches
 
 %build
 CFLAGS="%{optflags} -Ofast -ffast-math" \

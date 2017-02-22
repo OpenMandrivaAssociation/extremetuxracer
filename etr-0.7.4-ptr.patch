@@ -1,0 +1,11 @@
+--- etr-0.7.4/src/quadtree.cpp.orig	2017-02-22 21:52:27.634893754 +0000
++++ etr-0.7.4/src/quadtree.cpp	2017-02-22 21:52:34.467635112 +0000
+@@ -782,7 +782,7 @@
+ 			}
+ 
+ 			for (size_t j=0; j<numTerrains; j++) {
+-				if (Course.TerrList[j].texture > 0) {
++				if (Course.TerrList[j].texture != NULL) {
+ 					Course.TerrList[j].texture->Bind();
+ 
+ 					for (GLuint i=0; i<VertexArrayCounter; i++) {
