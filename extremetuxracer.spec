@@ -15,7 +15,6 @@ Source0:	extremetuxracer-%version-%beta.tar.xz
 %else
 Source0:	http://sourceforge.net/projects/extremetuxracer/files/releases/%version/etr-%version.tar.xz
 %endif
-Requires:	squirrel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	texinfo
@@ -23,8 +22,6 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libxml-2.0)
-BuildRequires:	squirrel
-BuildRequires:	pkgconfig(squirrel)
 BuildRequires:	pkgconfig(sfml-system)
 BuildRequires:	imagemagick
 
