@@ -1,24 +1,21 @@
 %define gname	etracer
-%define beta	%{nil}
+#define beta	%{nil}
 
 Name:		extremetuxracer
-Version:	0.6.0
+Version:	0.7.4
 Release:	%{?beta:0.%beta.}1
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
 URL:		http://extremetuxracer.sourceforge.net/
-#Source0:	http://downloads.sourceforge.net/extremetuxracer/%{name}-%{version}beta.tar.gz
 # Current code is available in svn only
 # svn co svn://svn.code.sf.net/p/extremetuxracer/code/tags/"0.6 Beta 1"
-%if "%beta" != "%{nil}"
+%if 0%{?beta:1}
 Source0:	extremetuxracer-%version-%beta.tar.xz
 %else
-Source0:	http://garr.dl.sourceforge.net/project/extremetuxracer/releases/%version/etr-%version.tar.xz
+Source0:	http://sourceforge.net/projects/extremetuxracer/files/releases/%version/etr-%version.tar.xz
 %endif
 Requires:	squirrel
-BuildRequires:	pkgconfig(SDL_image)
-BuildRequires:	pkgconfig(SDL_mixer)
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	texinfo
@@ -28,6 +25,7 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	squirrel
 BuildRequires:	pkgconfig(squirrel)
+BuildRequires:	pkgconfig(sfml-system)
 BuildRequires:	imagemagick
 
 Provides:	tuxracer = %{version}-%{release}
@@ -42,13 +40,9 @@ TuxRacer.
 %setup -q -n etr-%{version}
 
 %build
-aclocal
-autoheader
-automake -a --foreign
-autoconf
 CFLAGS="%{optflags} -Ofast -ffast-math" \
 CXXFLAGS="%{optflags} -Ofast -ffast-math" \
-%configure2_5x	--bindir=%{_gamesbindir} \
+%configure	--bindir=%{_gamesbindir} \
 		--datadir=%{_gamesdatadir} \
 		--disable-debug
 %make
@@ -58,9 +52,9 @@ CXXFLAGS="%{optflags} -Ofast -ffast-math" \
 
 for r in 16 22 32 48; do
 	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps
-	convert resources/%{gname}icon.svg -scale ${r}x${r} %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps/%{gname}.png
+	convert resources/etr.svg -scale ${r}x${r} %{buildroot}%{_datadir}/icons/hicolor/${r}x${r}/apps/%{gname}.png
 done
-install -D resources/%{gname}icon.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
+install -D resources/etr.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
 
 %find_lang %{gname} || touch %{gname}.lang
 
@@ -104,4 +98,5 @@ EOF
 %{_datadir}/applications/etr.desktop
 %{_datadir}/icons/hicolor/*/apps/%{gname}.*
 %{_datadir}/pixmaps/etr.png
+%{_datadir}/pixmaps/etr.svg
 %attr(755,root,root) %{_gamesbindir}/etr
