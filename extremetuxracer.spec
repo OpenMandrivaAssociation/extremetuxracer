@@ -3,7 +3,7 @@
 
 Name:		extremetuxracer
 Version:	0.7.4
-Release:	%{?beta:0.%beta.}1
+Release:	%{?beta:0.%beta.}2
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
