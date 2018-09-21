@@ -2,7 +2,7 @@
 #define beta	%{nil}
 
 Name:		extremetuxracer
-Version:	0.7.4
+Version:	0.7.5
 Release:	%{?beta:0.%beta.}2
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
@@ -95,6 +95,7 @@ EOF
 %doc %{_docdir}/etr
 %{_gamesdatadir}/*
 %{_datadir}/applications/etr.desktop
+%{_datadir}/appdata/etr.appdata.xml
 %{_datadir}/icons/hicolor/*/apps/%{gname}.*
 %{_datadir}/pixmaps/etr.png
 %{_datadir}/pixmaps/etr.svg

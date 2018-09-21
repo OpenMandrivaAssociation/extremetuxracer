@@ -1,4 +1,5 @@
 removed_sources:
   etr-0.6.0.tar.xz: 999824c4bfa96da95a5db7a8f1feec0727d583e2
-sources:
   etr-0.7.4.tar.xz: d4895d4dbc6035cbc8deeb6e3c81089309d45a53
+sources:
+  etr-0.7.5.tar.xz: 38925f74c827a879fc1ab912e1bf2461496c5474
