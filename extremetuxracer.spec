@@ -55,8 +55,6 @@ for r in 16 22 32 48; do
 done
 install -D resources/etr.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{gname}.svg
 
-%find_lang %{gname} || touch %{gname}.lang
-
 cat > README.urpmi << EOF
 
 ---------------------------Description-------------------------------------
@@ -89,7 +87,7 @@ configuration materielle.
 ---------------------------------------------------------------------------
 EOF
 
-%files -f %{gname}.lang
+%files
 %defattr(644,root,root,755)
 %doc README.urpmi
 %doc %{_docdir}/etr
