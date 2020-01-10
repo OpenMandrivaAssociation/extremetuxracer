@@ -36,7 +36,7 @@ TuxRacer.
 
 %prep
 %setup -q -n etr-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 CFLAGS="%{optflags} -Ofast -ffast-math" \
