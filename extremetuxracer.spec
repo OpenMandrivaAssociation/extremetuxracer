@@ -2,7 +2,7 @@
 #define beta %{nil}
 
 Name:		extremetuxracer
-Version:	0.8.1
+Version:	0.8.2
 Release:	%{?beta:0.%beta.}1
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
