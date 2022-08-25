@@ -1,3 +1,4 @@
+%define debug_package %{nil}
 %global optflags %optflags -Ofast
 #define beta %{nil}
 
@@ -39,8 +40,7 @@ TuxRacer.
 %build
 %configure \
 	--bindir=%{_gamesbindir} \
-	--datadir=%{_gamesdatadir} \
-	--disable-debug
+	--datadir=%{_gamesdatadir}
 
 %make_build
 
@@ -53,12 +53,15 @@ for r in 16 22 32 48; do
 done
 install -D resources/etr.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/etr.svg
 
+# Workaround for "/usr/bin/debugedit: Cannot handle 8-byte build ID"
+strip -R .comment --strip-unneeded %{buildroot}%{_gamesbindir}/etr
+
 %files
 %defattr(644,root,root,755)
 %doc %{_docdir}/etr
 %{_gamesdatadir}/*
 %{_datadir}/applications/etr.desktop
-%{_datadir}/appdata/etr.appdata.xml
+%{_datadir}/metainfo/etr.appdata.xml
 %{_datadir}/icons/hicolor/*/apps/etr.*
 %{_datadir}/pixmaps/etr.png
 %{_datadir}/pixmaps/etr.svg
