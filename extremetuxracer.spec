@@ -59,7 +59,7 @@ strip -R .comment --strip-unneeded %{buildroot}%{_bindir}/etr
 %files
 %defattr(644,root,root,755)
 %doc %{_docdir}/etr
-%{_datadir}/*
+#{_datadir}/*
 %{_datadir}/applications/net.sourceforge.extremetuxracer.desktop
 %{_datadir}/metainfo/net.sourceforge.extremetuxracer.metainfo.xml
 %{_datadir}/icons/hicolor/*/apps/etr.*
