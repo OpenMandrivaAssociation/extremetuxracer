@@ -60,8 +60,8 @@ strip -R .comment --strip-unneeded %{buildroot}%{_gamesbindir}/etr
 %defattr(644,root,root,755)
 %doc %{_docdir}/etr
 %{_gamesdatadir}/*
-%{_datadir}/applications/etr.desktop
-%{_datadir}/metainfo/etr.appdata.xml
+%{_datadir}/applications/net.sourceforge.extremetuxracer.desktop
+%{_datadir}/metainfo/net.sourceforge.extremetuxracer.metainfo.xml
 %{_datadir}/icons/hicolor/*/apps/etr.*
 %{_datadir}/pixmaps/etr.png
 %{_datadir}/pixmaps/etr.svg
