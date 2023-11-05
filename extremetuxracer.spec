@@ -39,8 +39,8 @@ TuxRacer.
 
 %build
 %configure \
-	--bindir=%{_gamesbindir} \
-	--datadir=%{_gamesdatadir}
+	--bindir=%{_bindir} \
+	--datadir=%{_datadir}
 
 %make_build
 
@@ -54,15 +54,15 @@ done
 install -D resources/etr.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/etr.svg
 
 # Workaround for "/usr/bin/debugedit: Cannot handle 8-byte build ID"
-strip -R .comment --strip-unneeded %{buildroot}%{_gamesbindir}/etr
+strip -R .comment --strip-unneeded %{buildroot}%{_bindir}/etr
 
 %files
 %defattr(644,root,root,755)
 %doc %{_docdir}/etr
-%{_gamesdatadir}/*
+%{_datadir}/*
 %{_datadir}/applications/net.sourceforge.extremetuxracer.desktop
 %{_datadir}/metainfo/net.sourceforge.extremetuxracer.metainfo.xml
 %{_datadir}/icons/hicolor/*/apps/etr.*
 %{_datadir}/pixmaps/etr.png
 %{_datadir}/pixmaps/etr.svg
-%attr(755,root,root) %{_gamesbindir}/etr
+%attr(755,root,root) %{_bindir}/etr
