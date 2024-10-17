@@ -8,7 +8,7 @@ Release:	%{?beta:0.%beta.}1
 Summary:	OpenGL racing game featuring Tux
 License:	GPLv2
 Group:		Games/Arcade
-URL:		http://extremetuxracer.sourceforge.net/
+URL:		https://extremetuxracer.sourceforge.net/
 # Current code is available in svn only
 # svn co svn://svn.code.sf.net/p/extremetuxracer/code/tags/"0.6 Beta 1"
 %if 0%{?beta:1}
