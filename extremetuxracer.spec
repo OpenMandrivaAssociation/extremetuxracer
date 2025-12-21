@@ -16,6 +16,11 @@ Source0:	extremetuxracer-%version-%beta.tar.xz
 %else
 Source0:	http://sourceforge.net/projects/extremetuxracer/files/releases/%version/etr-%version.tar.xz
 %endif
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	texinfo
