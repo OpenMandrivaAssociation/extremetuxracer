@@ -3,6 +3,8 @@ Date: Sun, 16 Mar 2025 00:53:18 +0000
 Subject: [PATCH] Port to SFML 3.0
 
 Rebased for etr-0.8.4 (CreditList is forward_list, not vector).
+Build with -std=c++26 (SFML 3 requires at least C++17) and fix
+clang narrowing errors in brace-initialized SFML vectors/rects.
 
 Mostly straightforward with a few more complex changes:
 * Include <GL/gl.h> instead of <GL/glx.h>. The glx header
@@ -15,7 +17,7 @@ Mostly straightforward with a few more complex changes:
 ---
 diff -Naur a/build/Installer/extremetuxracer.wxs b/build/Installer/extremetuxracer.wxs
 --- a/build/Installer/extremetuxracer.wxs	2024-05-09 23:11:59.000000000 +0200
-+++ b/build/Installer/extremetuxracer.wxs	2026-07-30 16:13:13.615946693 +0200
++++ b/build/Installer/extremetuxracer.wxs	2026-07-30 16:48:36.756277898 +0200
 @@ -29,10 +29,10 @@
            </Component>
            <Component Id='SFML' Guid='$(var.sfmlGUID)'>
@@ -33,7 +35,7 @@ diff -Naur a/build/Installer/extremetuxracer.wxs b/build/Installer/extremetuxrac
          <Merge Id="CRT" Language="0" SourceFile="$(var.CrtMergeModule)" DiskId="1" />
 diff -Naur a/configure.ac b/configure.ac
 --- a/configure.ac	2024-05-09 23:11:59.000000000 +0200
-+++ b/configure.ac	2026-07-30 16:13:13.616065265 +0200
++++ b/configure.ac	2026-07-30 16:48:36.779772656 +0200
 @@ -49,28 +49,28 @@
  AC_FUNC_MALLOC
  AC_CHECK_FUNCS([floor getcwd memmove memset mkdir pow sqrt strchr strdup])
@@ -67,9 +69,20 @@ diff -Naur a/configure.ac b/configure.ac
  [
    CPPFLAGS="${CPPFLAGS} $SFML_GRAPHICS_CFLAGS"
    LIBS="${LIBS} $SFML_GRAPHICS_LIBS"
+@@ -110,8 +110,8 @@
+ 
+ CPPFLAGS="${CPPFLAGS} -DETR_DATA_DIR=\\\"$datadir\\\""
+ 
+-# Request c++14 compatibility
+-CXXFLAGS="${CXXFLAGS} -std=c++14"
++# Request C++26 (SFML 3 requires C++17+)
++CXXFLAGS="${CXXFLAGS} -std=c++26"
+ 
+ AC_CONFIG_FILES([
+         Makefile
 diff -Naur a/src/audio.cpp b/src/audio.cpp
 --- a/src/audio.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/audio.cpp	2026-07-30 16:13:13.616186776 +0200
++++ b/src/audio.cpp	2026-07-30 16:48:36.758300575 +0200
 @@ -31,7 +31,7 @@
  struct TSound {
  	sf::SoundBuffer data;
@@ -118,7 +131,7 @@ diff -Naur a/src/audio.cpp b/src/audio.cpp
  		curr_music = music;
 diff -Naur a/src/bh.h b/src/bh.h
 --- a/src/bh.h	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/bh.h	2026-07-30 16:13:13.616264707 +0200
++++ b/src/bh.h	2026-07-30 16:48:36.759132145 +0200
 @@ -68,7 +68,7 @@
  #	include <pwd.h>
  #	include <dirent.h>
@@ -130,7 +143,7 @@ diff -Naur a/src/bh.h b/src/bh.h
  
 diff -Naur a/src/common.cpp b/src/common.cpp
 --- a/src/common.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/common.cpp	2026-07-30 16:13:13.616331618 +0200
++++ b/src/common.cpp	2026-07-30 16:48:36.759504970 +0200
 @@ -30,7 +30,7 @@
  //				color utils
  // --------------------------------------------------------------------
@@ -142,7 +155,7 @@ diff -Naur a/src/common.cpp b/src/common.cpp
  const sf::Color colLYell =		TColor(1.0, 1.0, 0.4, 1.0);
 diff -Naur a/src/common.h b/src/common.h
 --- a/src/common.h	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/common.h	2026-07-30 16:13:13.616404559 +0200
++++ b/src/common.h	2026-07-30 16:48:36.759869615 +0200
 @@ -21,8 +21,10 @@
  #include "bh.h"
  #include "matrices.h"
@@ -158,7 +171,7 @@ diff -Naur a/src/common.h b/src/common.h
  #	define M_PI 3.1415926535
 diff -Naur a/src/config_screen.cpp b/src/config_screen.cpp
 --- a/src/config_screen.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/config_screen.cpp	2026-07-30 16:13:13.616481090 +0200
++++ b/src/config_screen.cpp	2026-07-30 16:48:36.760283051 +0200
 @@ -97,13 +97,13 @@
  	if (release) return;
  
@@ -178,7 +191,7 @@ diff -Naur a/src/config_screen.cpp b/src/config_screen.cpp
  			else if (textbuttons[1]->focussed())
 diff -Naur a/src/credits.cpp b/src/credits.cpp
 --- a/src/credits.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/credits.cpp	2026-07-30 16:13:20.387654110 +0200
++++ b/src/credits.cpp	2026-07-30 16:48:36.760663775 +0200
 @@ -39,7 +39,7 @@
  static float y_offset = 0;
  static bool moving = true;
@@ -257,7 +270,7 @@ diff -Naur a/src/credits.cpp b/src/credits.cpp
  }
 diff -Naur a/src/event.cpp b/src/event.cpp
 --- a/src/event.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/event.cpp	2026-07-30 16:13:13.616880226 +0200
++++ b/src/event.cpp	2026-07-30 16:48:36.761006310 +0200
 @@ -67,14 +67,14 @@
  void CEvent::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
  	if (release) return;
@@ -278,7 +291,7 @@ diff -Naur a/src/event.cpp b/src/event.cpp
  		default:
 diff -Naur a/src/event_select.cpp b/src/event_select.cpp
 --- a/src/event_select.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/event_select.cpp	2026-07-30 16:13:13.616965687 +0200
++++ b/src/event_select.cpp	2026-07-30 16:48:36.761357605 +0200
 @@ -53,17 +53,17 @@
  void CEventSelect::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
  	if (release) return;
@@ -303,7 +316,7 @@ diff -Naur a/src/event_select.cpp b/src/event_select.cpp
  		default:
 diff -Naur a/src/font.cpp b/src/font.cpp
 --- a/src/font.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/font.cpp	2026-07-30 16:13:13.617043628 +0200
++++ b/src/font.cpp	2026-07-30 16:48:36.761700669 +0200
 @@ -110,7 +110,7 @@
  
  int CFont::LoadFont(const std::string& name, const std::string& path) {
@@ -342,7 +355,7 @@ diff -Naur a/src/font.cpp b/src/font.cpp
  void CFont::GetTextSize(const sf::String& text, float &x, float &y, const std::string &fontname, unsigned int size) const {
 diff -Naur a/src/game_over.cpp b/src/game_over.cpp
 --- a/src/game_over.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/game_over.cpp	2026-07-30 16:13:13.617129259 +0200
++++ b/src/game_over.cpp	2026-07-30 16:48:36.762082934 +0200
 @@ -55,7 +55,7 @@
  
  void CGameOver::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
@@ -354,7 +367,7 @@ diff -Naur a/src/game_over.cpp b/src/game_over.cpp
  void CGameOver::Mouse(int button, int state, int x, int y) {
 diff -Naur a/src/game_type_select.cpp b/src/game_type_select.cpp
 --- a/src/game_type_select.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/game_type_select.cpp	2026-07-30 16:13:13.617218830 +0200
++++ b/src/game_type_select.cpp	2026-07-30 16:48:36.813939515 +0200
 @@ -38,7 +38,7 @@
  CGameTypeSelect GameTypeSelect;
  
@@ -395,7 +408,7 @@ diff -Naur a/src/game_type_select.cpp b/src/game_type_select.cpp
 +
 +	logo = sf::Sprite(Tex.GetSFTexture(T_TITLE));
 +	logo->setScale({Winsys.scale, Winsys.scale});
-+	logo->setPosition({(Winsys.resolution.width - logo->getTextureRect().size.x) / 2.0f, (5)});
++	logo->setPosition({(Winsys.resolution.width - logo->getTextureRect().size.x) / 2.0f, 5.f});
  
  	Music.Play(param.menu_music, true);
  }
@@ -410,7 +423,7 @@ diff -Naur a/src/game_type_select.cpp b/src/game_type_select.cpp
  
 diff -Naur a/src/gui.cpp b/src/gui.cpp
 --- a/src/gui.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/gui.cpp	2026-07-30 16:13:13.617326152 +0200
++++ b/src/gui.cpp	2026-07-30 16:48:36.813530780 +0200
 @@ -78,11 +78,11 @@
  
  TLabel::TLabel(const sf::String& string, int x, int y, const sf::Color& color)
@@ -419,7 +432,7 @@ diff -Naur a/src/gui.cpp b/src/gui.cpp
 +	, text(FT.getCurrentFont(), string, FT.GetSize()) {
  	if (x == CENTER)
 -		text.setPosition((Winsys.resolution.width - text.getLocalBounds().width) / 2, y);
-+		text.setPosition({(Winsys.resolution.width - text.getLocalBounds().size.x) / 2, y});
++		text.setPosition({(Winsys.resolution.width - text.getLocalBounds().size.x) / 2, static_cast<float>(y)});
  	else
 -		text.setPosition(x, y);
 +		text.setPosition(sf::Vector2f(x, y));
@@ -647,7 +660,7 @@ diff -Naur a/src/gui.cpp b/src/gui.cpp
 -	sf::Vector2u texSize = sprite.getTexture()->getSize();
 -	sprite.setTextureRect(sf::IntRect(textl[type] * texSize.x, texbr[type] * texSize.y, texSize.x / 2, texSize.y / 4));
 +	sf::Vector2i texSize(sprite.getTexture().getSize());
-+	sprite.setTextureRect(sf::IntRect({textl[type] * texSize.x, texbr[type] * texSize.y}, {texSize.x / 2, texSize.y / 4}));
++	sprite.setTextureRect(sf::IntRect({static_cast<int>(textl[type] * texSize.x), static_cast<int>(texbr[type] * texSize.y)}, {texSize.x / 2, texSize.y / 4}));
  }
  
  void TArrow::Draw() const {
@@ -768,7 +781,7 @@ diff -Naur a/src/gui.cpp b/src/gui.cpp
  				break;
 diff -Naur a/src/loading.cpp b/src/loading.cpp
 --- a/src/loading.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/loading.cpp	2026-07-30 16:13:13.617555885 +0200
++++ b/src/loading.cpp	2026-07-30 16:48:36.763236159 +0200
 @@ -50,8 +50,8 @@
  	}
  
@@ -782,7 +795,7 @@ diff -Naur a/src/loading.cpp b/src/loading.cpp
  
 diff -Naur a/src/newplayer.cpp b/src/newplayer.cpp
 --- a/src/newplayer.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/newplayer.cpp	2026-07-30 16:13:13.617622416 +0200
++++ b/src/newplayer.cpp	2026-07-30 16:48:36.763733416 +0200
 @@ -49,10 +49,10 @@
  
  	KeyGUI(key, release);
@@ -798,7 +811,7 @@ diff -Naur a/src/newplayer.cpp b/src/newplayer.cpp
  			break;
 diff -Naur a/src/ogl_test.cpp b/src/ogl_test.cpp
 --- a/src/ogl_test.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/ogl_test.cpp	2026-07-30 16:13:13.617682096 +0200
++++ b/src/ogl_test.cpp	2026-07-30 16:48:36.763956339 +0200
 @@ -45,7 +45,7 @@
  
  void COglTest::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
@@ -810,7 +823,7 @@ diff -Naur a/src/ogl_test.cpp b/src/ogl_test.cpp
  }
 diff -Naur a/src/particles.cpp b/src/particles.cpp
 --- a/src/particles.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/particles.cpp	2026-07-30 16:13:13.617810188 +0200
++++ b/src/particles.cpp	2026-07-30 16:48:36.764542696 +0200
 @@ -66,32 +66,31 @@
  static TVector2d last_push_position;
  static bool push_position_initialized = false;
@@ -876,7 +889,7 @@ diff -Naur a/src/particles.cpp b/src/particles.cpp
  				++p;
 diff -Naur a/src/paused.cpp b/src/paused.cpp
 --- a/src/paused.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/paused.cpp	2026-07-30 16:13:13.617940280 +0200
++++ b/src/paused.cpp	2026-07-30 16:48:36.765164165 +0200
 @@ -45,19 +45,19 @@
  void CPaused::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
  	if (release) return;
@@ -904,7 +917,7 @@ diff -Naur a/src/paused.cpp b/src/paused.cpp
  		default:
 diff -Naur a/src/race_select.cpp b/src/race_select.cpp
 --- a/src/race_select.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/race_select.cpp	2026-07-30 16:13:13.618012231 +0200
++++ b/src/race_select.cpp	2026-07-30 16:48:36.765926815 +0200
 @@ -109,24 +109,24 @@
  	KeyGUI(key, release);
  	UpdateInfo();
@@ -938,7 +951,7 @@ diff -Naur a/src/race_select.cpp b/src/race_select.cpp
  			else
 diff -Naur a/src/racing.cpp b/src/racing.cpp
 --- a/src/racing.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/racing.cpp	2026-07-30 16:13:13.618122682 +0200
++++ b/src/racing.cpp	2026-07-30 16:48:36.766430461 +0200
 @@ -69,61 +69,61 @@
  void CRacing::Keyb(sf::Keyboard::Key key, bool release, int x, int y) {
  	switch (key) {
@@ -1049,7 +1062,7 @@ diff -Naur a/src/racing.cpp b/src/racing.cpp
  		default:
 diff -Naur a/src/regist.cpp b/src/regist.cpp
 --- a/src/regist.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/regist.cpp	2026-07-30 16:13:13.618302175 +0200
++++ b/src/regist.cpp	2026-07-30 16:48:36.767098590 +0200
 @@ -52,10 +52,10 @@
  	TWidget* focussed = KeyGUI(key, release);
  	if (release) return;
@@ -1065,7 +1078,7 @@ diff -Naur a/src/regist.cpp b/src/regist.cpp
  				State::manager.RequestEnterState(NewPlayer);
 diff -Naur a/src/score.cpp b/src/score.cpp
 --- a/src/score.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/score.cpp	2026-07-30 16:13:13.618378696 +0200
++++ b/src/score.cpp	2026-07-30 16:48:36.767740018 +0200
 @@ -175,19 +175,19 @@
  	KeyGUI(key, release);
  	if (release) return;
@@ -1093,7 +1106,7 @@ diff -Naur a/src/score.cpp b/src/score.cpp
  		default:
 diff -Naur a/src/splash_screen.cpp b/src/splash_screen.cpp
 --- a/src/splash_screen.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/splash_screen.cpp	2026-07-30 16:13:13.619161636 +0200
++++ b/src/splash_screen.cpp	2026-07-30 16:48:36.768724231 +0200
 @@ -50,17 +50,17 @@
  	Trans.LoadTranslations(param.language);  // Before first texts are being displayed
  
@@ -1133,7 +1146,7 @@ diff -Naur a/src/splash_screen.cpp b/src/splash_screen.cpp
  }
 diff -Naur a/src/states.cpp b/src/states.cpp
 --- a/src/states.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/states.cpp	2026-07-30 16:13:13.619271158 +0200
++++ b/src/states.cpp	2026-07-30 16:48:36.769598693 +0200
 @@ -53,63 +53,38 @@
  }
  
@@ -1230,7 +1243,7 @@ diff -Naur a/src/states.cpp b/src/states.cpp
  	}
 diff -Naur a/src/textures.cpp b/src/textures.cpp
 --- a/src/textures.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/textures.cpp	2026-07-30 16:13:13.619350879 +0200
++++ b/src/textures.cpp	2026-07-30 16:48:36.770282502 +0200
 @@ -158,8 +158,8 @@
  		DrawFrameX(x - frame, y - frame, w + 2 * frame, h + 2 * frame, frame, colTransp, col, 1.f);
  
@@ -1244,7 +1257,7 @@ diff -Naur a/src/textures.cpp b/src/textures.cpp
  
 diff -Naur a/src/tool_char.cpp b/src/tool_char.cpp
 --- a/src/tool_char.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/tool_char.cpp	2026-07-30 16:13:13.619473481 +0200
++++ b/src/tool_char.cpp	2026-07-30 16:48:36.771090582 +0200
 @@ -124,111 +124,111 @@
  	must_render = true;
  
@@ -1390,7 +1403,7 @@ diff -Naur a/src/tool_char.cpp b/src/tool_char.cpp
  				if (comp > 3) comp = 0;
 diff -Naur a/src/tool_frame.cpp b/src/tool_frame.cpp
 --- a/src/tool_frame.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/tool_frame.cpp	2026-07-30 16:13:13.619951077 +0200
++++ b/src/tool_frame.cpp	2026-07-30 16:48:36.771683510 +0200
 @@ -57,139 +57,139 @@
  	TKeyframe *frame = TestFrame.GetFrame(curr_frame);
  
@@ -1592,7 +1605,7 @@ diff -Naur a/src/tool_frame.cpp b/src/tool_frame.cpp
  		default:
 diff -Naur a/src/winsys.cpp b/src/winsys.cpp
 --- a/src/winsys.cpp	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/winsys.cpp	2026-07-30 16:13:13.620102719 +0200
++++ b/src/winsys.cpp	2026-07-30 16:48:36.772302478 +0200
 @@ -46,7 +46,7 @@
  	}
  
@@ -1662,7 +1675,7 @@ diff -Naur a/src/winsys.cpp b/src/winsys.cpp
  
 diff -Naur a/src/winsys.h b/src/winsys.h
 --- a/src/winsys.h	2024-05-09 23:12:13.000000000 +0200
-+++ b/src/winsys.h	2026-07-30 16:13:13.620257471 +0200
++++ b/src/winsys.h	2026-07-30 16:48:36.772760744 +0200
 @@ -62,7 +62,7 @@
  	void clear() { window.clear(colBackgr); }
  	void beginSFML() { if (!sfmlRenders) window.pushGLStates(); sfmlRenders = true; }
