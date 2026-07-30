@@ -18,7 +18,6 @@ Source0:	http://sourceforge.net/projects/extremetuxracer/files/releases/%version
 %endif
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	pkgconfig(alsa)
@@ -32,6 +31,9 @@ BuildRequires:	pkgconfig(sfml-system)
 BuildRequires:	imagemagick
 
 Provides:	tuxracer = %{version}-%{release}
+
+%patchlist
+sfml3-port.patch
 
 %description
 Extreme Tux Racer is an OpenGL racing game featuring Tux, the Linux
